@@ -1,6 +1,7 @@
 *
 
 !.gitignore
+!LICENSE
 !setup.py
 !schedule-manager-ui
 !schedule-manager-ui/**
