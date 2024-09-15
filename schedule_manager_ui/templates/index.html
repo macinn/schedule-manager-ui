@@ -13,13 +13,9 @@
             <div>
                 <h1>Job Control Panel</h1>
             </div>
-            {% if password %}
+            {% if require_authentication %}
                 <div class="row fill right">
-                    <button class="auth logout">Log out</button>
-                </div>
-            {% else %}
-                <div class="row fill right">
-                    <button class="auth authenticate">Authenticate</button>
+                    <button id="auth-button" class="auth authenticate">Authenticate</button>
                 </div>
             {% endif %}
         </div>
@@ -55,7 +51,7 @@
                     </abbr>
                 </td>
                 <td>
-                    <form action="{{ url_for('schedulemanager_ui_toggle_job', job_id=job.id) }}" method="POST">
+                    <form class="job-form" action="{{ url_for('schedulemanager_ui_toggle_job', job_id=job.id) }}" method="POST">
                         <button type="submit" class="{{ 'deactivate' if job.next_run_time else 'activate' }}">
                             {{ 'Deactivate' if job.next_run_time else 'Activate' }}
                         </button>
@@ -65,5 +61,8 @@
             {% endfor %}
         </table>
     </div>
+    {% if require_authentication %}
+        <script src="{{ url_for('schedulemanager_ui_serve_files', filename='script.js') }}"></script>
+    {% endif %}
 </body>
 </html>
