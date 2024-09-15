@@ -2,6 +2,9 @@
 
 !.gitignore
 !LICENSE
+!README.md
+!project.toml
 !setup.py
-!schedule-manager-ui
-!schedule-manager-ui/**
+!schedule_manager_ui
+!schedule_manager_ui/*
+!schedule_manager_ui/templates/*
