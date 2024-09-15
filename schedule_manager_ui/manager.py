@@ -39,7 +39,7 @@ class ScheduleManager():
                 job.resume()
             else:
                 job.pause()
-            return redirect(ScheduleManager.HOME_PATH)
+            return redirect(self.HOME_PATH)
 
     def __init_event_listeners(self):
         def job_listener(event: JobEvent):
