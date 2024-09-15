@@ -3,7 +3,7 @@
 !.gitignore
 !LICENSE
 !README.md
-!project.toml
+!pyproject.toml
 !setup.py
 !schedule_manager_ui
 !schedule_manager_ui/*
