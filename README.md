@@ -7,5 +7,5 @@ from schedule_manager_ui import ScheduleManager
 
 app = Flask(__name__)
 scheduler  = BackgroundScheduler()
-sm = ScheduleManager(app, scheduler )
+sm = ScheduleManager(app, scheduler)
 ```
