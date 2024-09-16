@@ -1,4 +1,4 @@
-# schedule-manager-ui [![Downloads](https://pepy.tech/badge/schedule-manager-ui)](https://pepy.tech/project/schedule-manager-ui)
+# schedule-manager-ui
 
 ## Table of Contents
 1. [Description](#description)
