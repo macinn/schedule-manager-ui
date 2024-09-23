@@ -9,15 +9,15 @@
 </head>
 <body>
     <div class="container">
-        <div>
-            <div>
-                <h1>Job Control Panel</h1>
-            </div>
+        <div id="header-container">
             {% if require_authentication %}
-                <div class="row fill right">
+                <div class="row right">
                     <button id="auth-button" class="auth authenticate">Authenticate</button>
                 </div>
             {% endif %}
+            <div>
+                <h1>Job Control Panel</h1>
+            </div>
         </div>
         <table>
             <tr>
