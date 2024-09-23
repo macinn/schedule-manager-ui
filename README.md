@@ -7,10 +7,11 @@
 4. [Example](#example)
    
 ## Description
-Web UI for seamless interaction with APScheduler job schedulers, ready to use out of the box.
+Web UI for seamless interaction with APScheduler job schedulers, ready to use out of the box. 
+> [![Downloads](https://pepy.tech/badge/schedule-manager-ui)](https://pepy.tech/project/schedule-manager-ui) 
 
 ## Installation
-Use `pip` to install.
+You can use `pip` to install. 
 ```bash
 pip install schedule-manager-ui
 ```
