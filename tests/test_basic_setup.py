@@ -36,7 +36,7 @@ def test_setup_dependecies():
         app.test_client()
         scheduler = BackgroundScheduler()
         scheduler.start()
-    except ImportError:
+    except:
         pytest.fail("Dependencies could not be set up")
 
 
@@ -55,5 +55,5 @@ def test_setup_manager():
         scheduler = BackgroundScheduler()
         ScheduleManager(app, scheduler, require_authentication=True)
         scheduler.start()
-    except ImportError:
+    except:
         pytest.fail("'ScheduleManager' could not be set up")
