@@ -21,6 +21,7 @@ classifiers = [
 dependencies = [
     "flask",
     "apscheduler",
+    "flask_sqlalchemy"
 ]
 
 [project.urls]
