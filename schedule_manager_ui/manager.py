@@ -9,13 +9,16 @@ from sqlalchemy.orm import Session, declarative_base
 from sqlalchemy import Column, Integer, String, DateTime
 import os
 
+
 def get_datetime_now() -> datetime:
     if tz := os.environ.get('TZ', None):
         return datetime.now(timezone(tz))
     else:
         return datetime.now()
-    
+
+
 Base = declarative_base()
+
 
 class APSEvent(Base):
     __tablename__ = 'events'
@@ -25,7 +28,8 @@ class APSEvent(Base):
     event_type = Column(String(50))
     info = Column(String(2000))
     timestamp = Column(DateTime, default=get_datetime_now)
-    
+
+
 class ScheduleManager():
     """
     Class that manages scheduling tasks and provides a web interface
@@ -60,7 +64,7 @@ class ScheduleManager():
             if not self.API_KEY:
                 raise ValueError('Could not retrieve API key for ScheduleManager!')
         self.last_execution_store: dict[str, datetime] = {}
-        
+
         self.engine = create_engine('sqlite:///apscheduler_events.db')
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
@@ -119,7 +123,7 @@ class ScheduleManager():
             return render_template_string(scheduler_template,
                                           events=events,
                                           require_authentication=self.AUTHENTICATE)
-        
+
     def _init_event_listeners(self):
         def get_job_type(code: int) -> str:
             codes: dict[int, str] = {}
@@ -141,7 +145,7 @@ class ScheduleManager():
             codes[2 ** 15] = 'EVENT_JOB_SUBMITTED'
             codes[2 ** 16] = 'EVENT_JOB_MAX_INSTANCES'
             return codes[code]
-        
+
         def job_listener(event: SchedulerEvent):
             args = {}
             args['event_type'] = get_job_type(event.code)
@@ -155,9 +159,9 @@ class ScheduleManager():
                     args['info'] = str(event.retval)
                 if event.exception:
                     args['info'] = f'{event.exception}: {event.traceback}'
-            
+
             new_event = APSEvent(**args)
-            
+
             with Session(self.engine) as session:
                 session.add(new_event)
                 session.commit()
