@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import Flask, request, Response
 from flask import render_template_string, redirect, send_from_directory
 from apscheduler.schedulers.base import BaseScheduler
@@ -86,7 +86,14 @@ class ScheduleManager():
             if event.code == EVENT_JOB_REMOVED:
                 self.last_execution_store.pop(event.job_id)
             elif event.code == EVENT_JOB_EXECUTED:
-                self.last_execution_store.update({event.job_id: datetime.now()})
+                self.last_execution_store.update({event.job_id: ScheduleManager.__get_datetime_now()})
 
         self.scheduler.add_listener(job_listener,
                                     EVENT_JOB_EXECUTED | EVENT_JOB_REMOVED)
+    
+    @staticmethod
+    def __get_datetime_now() -> datetime:
+        if tz := os.environ.get('TZ', None):
+            return datetime.now(timezone(tz))
+        else:
+            return datetime.now()
