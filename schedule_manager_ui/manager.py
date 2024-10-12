@@ -152,10 +152,12 @@ class ScheduleManager():
             args['event_type'] = get_job_type(event.code)
             if isinstance(event, JobSubmissionEvent):
                 args['job_id'] = event.job_id
-                args['job_name'] = self.scheduler.get_job(event.job_id).func.__name__
+                if job := self.scheduler.get_job(event.job_id):
+                    args['job_name'] = job.func.__name__
             if isinstance(event, JobExecutionEvent):
                 args['job_id'] = event.job_id
-                args['job_name'] = self.scheduler.get_job(event.job_id).func.__name__
+                if job := self.scheduler.get_job(event.job_id):
+                    args['job_name'] = job.func.__name__
                 if event.retval:
                     args['info'] = str(event.retval)
                 if event.exception:
