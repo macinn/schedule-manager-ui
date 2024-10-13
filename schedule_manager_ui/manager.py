@@ -116,7 +116,7 @@ class ScheduleManager():
             return redirect(self.HOME_PATH)
 
         @self.app.route(self.HOME_PATH + '/logs')
-        def get_events():
+        def schedulemanager_ui_get_logs():
             with Session(self.engine) as session:
                 events = session.query(APSEvent).order_by(APSEvent.timestamp.desc()).all()
             with open(os.path.join(file_path, 'templates/logs.html')) as file:
