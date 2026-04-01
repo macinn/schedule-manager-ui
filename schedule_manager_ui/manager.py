@@ -39,22 +39,29 @@ class ScheduleManager():
 
     def __init__(self, app: Flask, scheduler: BaseScheduler,
                  path: str = '/schedule-manager-ui',
-                 require_authentication: bool = True, apikey: str = None):
+                 require_authentication: bool = True, apikey: str = None,
+                 db_url: str = 'sqlite:///apscheduler_events.db'):
         """
-        Initializes the Manager class.
+        Initializes the ScheduleManager.
+
         Args:
             app (Flask):
                 The Flask application instance.
             scheduler (BaseScheduler):
-                The scheduler instance.
+                The APScheduler scheduler instance.
             path (str, optional):
-                The path for the schedule manager UI.
+                The URL path prefix for the schedule manager UI.
                 Defaults to '/schedule-manager-ui'.
             require_authentication (bool, optional):
-                Flag to require API key for job updates. Defaults to True.
-            apikey (str, optional): The API key for authentication.
-                If not provided, it will be fetched from the environment
-                variable 'SM_UI_APIKEY'.
+                Whether to require an API key for job toggle requests.
+                Defaults to True.
+            apikey (str, optional):
+                The API key used for authentication. If not provided, it is
+                read from the environment variable 'SM_UI_APIKEY'. Raises
+                ValueError if authentication is required and no key is found.
+            db_url (str, optional):
+                SQLAlchemy database URL used to store job execution events.
+                Defaults to 'sqlite:///apscheduler_events.db'.
         """
         self.app: Flask = app
         self.scheduler: BaseScheduler = scheduler
@@ -66,7 +73,7 @@ class ScheduleManager():
                 raise ValueError('Could not retrieve API key for ScheduleManager!')
         self.last_execution_store: dict[str, datetime] = {}
 
-        self.engine = create_engine('sqlite:///apscheduler_events.db')
+        self.engine = create_engine(db_url)
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
 
@@ -74,6 +81,7 @@ class ScheduleManager():
         self._init_event_listeners()
 
     def _init_endpoints(self):
+        """Register Flask routes for the schedule manager UI."""
         file_path = os.path.abspath(os.path.dirname(__file__))
 
         def find_in_store(job_id):
@@ -126,6 +134,7 @@ class ScheduleManager():
                                           require_authentication=self.AUTHENTICATE)
 
     def _init_event_listeners(self):
+        """Attach an APScheduler event listener that persists all events to the database."""
         def get_job_type(code: int) -> str:
             codes: dict[int, str] = {}
             codes[2 ** 0] = 'EVENT_SCHEDULER_START'

@@ -15,3 +15,12 @@ def test_custom_path(client, app, scheduler):
 
     response = client.get(default_manager_path)
     assert response.status_code == 404
+
+
+def test_custom_db_url(app, scheduler):
+    sm = ScheduleManager(app, scheduler, db_url='sqlite:///:memory:')
+    assert sm.engine is not None
+
+
+def test_default_db_url(schedule_manager):
+    assert 'apscheduler_events.db' in str(schedule_manager.engine.url)
